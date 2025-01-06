@@ -7,6 +7,6 @@ jmh-benchmark/target
 internal/target
 
 plugins
-config.yml
+/config.yml
 logs
 server-icon.png

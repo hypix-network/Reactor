@@ -1,0 +1,11 @@
+ip: "localhost"
+port: 25565
+
+view-distance: 10
+simulation-distance: 8
+
+motd:
+  line1: "Reactor"
+  line2: "Faster minecraft server in java"
+  protocol-version: 767
+  version-name: "1.21"
