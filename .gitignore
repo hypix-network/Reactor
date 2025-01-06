@@ -1,0 +1,12 @@
+target
+.vscode
+.idea
+data-parser/target
+api/target
+jmh-benchmark/target
+internal/target
+
+plugins
+config.yml
+logs
+server-icon.png
