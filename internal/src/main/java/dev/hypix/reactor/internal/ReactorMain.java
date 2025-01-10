@@ -53,6 +53,9 @@ public final class ReactorMain {
         Reactor.setServer(server);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> server.onExit()));
 
+        server.getPluginManager().loadPlugins(mainDirectory);
+        server.getPluginManager().enablePlugins();
+
         serverConnection.registerDefaultHandlers();
         return console;
     }

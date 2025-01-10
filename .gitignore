@@ -6,7 +6,7 @@ api/target
 jmh-benchmark/target
 internal/target
 
-plugins
+/plugins
 /config.yml
-logs
-server-icon.png
+/logs
+/server-icon.png

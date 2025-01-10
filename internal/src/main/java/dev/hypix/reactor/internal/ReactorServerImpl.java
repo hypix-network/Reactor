@@ -5,10 +5,12 @@ import org.tinylog.Logger;
 import dev.hypix.reactor.api.ReactorServer;
 import dev.hypix.reactor.api.config.server.ServerConfig;
 import dev.hypix.reactor.api.entity.EntityCreator;
+import dev.hypix.reactor.api.plugin.PluginManager;
 import dev.hypix.reactor.api.scheduler.ServerScheduler;
 import dev.hypix.reactor.api.world.WorldManager;
 import dev.hypix.reactor.internal.console.Console;
 import dev.hypix.reactor.internal.entity.EntityCreatorImpl;
+import dev.hypix.reactor.internal.plugin.PluginManagerImpl;
 import dev.hypix.reactor.internal.tick.MainThread;
 
 import lombok.Getter;
@@ -22,6 +24,7 @@ final class ReactorServerImpl implements ReactorServer {
     private final MainThread mainThread;
     private final Console console;
 
+    private final PluginManager pluginManager = new PluginManagerImpl();
     private final EntityCreator entityCreator = new EntityCreatorImpl();
     private final WorldManager worldManager = new WorldManager();
 

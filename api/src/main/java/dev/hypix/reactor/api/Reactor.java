@@ -3,7 +3,7 @@ package dev.hypix.reactor.api;
 public final class Reactor {
     private static ReactorServer server = null;
 
-    public static void setServer(ReactorServer server) {
+    public static void setServer(final ReactorServer server) {
         if (Reactor.server != null) {
             throw new IllegalStateException("Server is already started");
         }

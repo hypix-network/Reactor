@@ -270,6 +270,7 @@ public final class NBTCollection implements Collection<TagNBT> {
         public void remove() {
             if (array[index] != null) {
                 collection.size--;
+                array[index] = null;
             }
         }
 
