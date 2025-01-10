@@ -10,6 +10,7 @@ import java.util.List;
 import org.tinylog.Logger;
 
 import dev.hypix.reactor.api.plugin.Plugin;
+import dev.hypix.reactor.api.plugin.listener.EventExecutor;
 import dev.hypix.reactor.api.plugin.listener.Listener;
 import dev.hypix.reactor.internal.plugin.listener.executor.ListenerReflectionExecutor;
 
@@ -30,7 +31,7 @@ public final class ListenerLoader {
         return classes;
     }
 
-    public static List<RegisteredListener> load(final Object object, final Plugin plugin) {
+    public static List<RegisteredListener> load(final Object object, final Plugin plugin, EventExecutor executor) {
         final Class<?> sourceClass = object.getClass();
         final Method[] methods = sourceClass.getDeclaredMethods();
         if (methods.length == 0) {
@@ -51,22 +52,19 @@ public final class ListenerLoader {
                 continue;
             }
 
-            final MethodHandle methodHandle;
-            try {
-                methodHandle = MethodHandles.publicLookup().unreflect(method);
-            } catch (final IllegalAccessException e) {
-                Logger.error("Error trying to load the listener {} in the class", method.getName(), object);
-                Logger.error(e);
-                continue;
+            if (executor == null) {
+                final MethodHandle methodHandle;
+                try {
+                    methodHandle = MethodHandles.publicLookup().unreflect(method);
+                } catch (final IllegalAccessException e) {
+                    Logger.error("Error trying to load the listener {} in the class", method.getName(), object);
+                    Logger.error(e);
+                    continue;
+                }
+                executor = new ListenerReflectionExecutor(listener, methodHandle);
             }
 
-            listeners.add(new RegisteredListener(
-                sourceClass,
-                plugin,
-                listener,
-                new ListenerReflectionExecutor(listener, methodHandle),
-                method.getParameterTypes()[0]
-            ));
+            listeners.add(new RegisteredListener(sourceClass, plugin, listener, executor,method.getParameterTypes()[0]));
         }
 
         return listeners;

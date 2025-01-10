@@ -30,7 +30,14 @@ public final class PluginManagerImpl implements PluginManager {
     @Override
     public void registerListeners(final Plugin plugin, final Object... listeners) {
         for (final Object listener : listeners) {
-            addListeners(ListenerLoader.load(listener, plugin));
+            addListeners(ListenerLoader.load(listener, plugin, null));
+        }
+    }
+
+    @Override
+    public void registerListeners(Plugin plugin, EventExecutor executor, Object... listeners) {
+        for (final Object listener : listeners) {
+            addListeners(ListenerLoader.load(listener, plugin, executor));
         }
     }
 

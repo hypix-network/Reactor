@@ -9,6 +9,7 @@ import dev.hypix.reactor.api.plugin.listener.EventExecutor;
 
 public interface PluginManager {
     void registerListeners(final Plugin plugin, final Object... listeners);
+    void registerListeners(final Plugin plugin, final EventExecutor executor, final Object... listeners);
 
     <T> void registerListener(final Plugin plugin, final EventExecutor executor, final EventPriority priority, final boolean ignoreCancelled, final Class<T> clazz, final Consumer<T> consumer);
     <T> void registerListener(final Plugin plugin, final Class<T> clazz, final Consumer<T> consumer);
