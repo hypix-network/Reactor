@@ -1,4 +1,4 @@
-package dev.hypix.reactor.protocol.outbound.configuration.registry;
+package dev.hypix.reactor.protocol.outbound.configuration;
 
 import dev.hypix.reactor.api.entity.damage.DamageType;
 import dev.hypix.reactor.api.entity.wolf.WolfType;

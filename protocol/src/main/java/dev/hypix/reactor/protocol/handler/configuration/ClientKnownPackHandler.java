@@ -7,7 +7,7 @@ import dev.hypix.reactor.protocol.inbound.PacketInData;
 import dev.hypix.reactor.protocol.inbound.configuration.PacketInSelectKnownPack;
 import dev.hypix.reactor.protocol.outbound.CachedPacket;
 import dev.hypix.reactor.protocol.outbound.configuration.PacketOutFinishConfiguration;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.Registries;
+import dev.hypix.reactor.protocol.outbound.configuration.Registries;
 
 final class ClientKnownPackHandler implements PacketHandler {
 
