@@ -10,18 +10,18 @@ public final class PacketOutPaintingTypeRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = Painting.ALL.length;
+        final int amount = Painting.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 18, 8);
 
         buffer.writeString("minecraft:painting_variant");
         buffer.writeVarInt(amount);
     
         for (final Painting painting : Painting.ALL) {
-            buffer.writeString(painting.getId());
+            buffer.writeString(painting.getAssetId());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();
-            nbt.addString("asset_id", painting.getId());
+            nbt.addString("asset_id", painting.getAssetId());
             nbt.addInt("height", painting.getHeight());
             nbt.addInt("width", painting.getWidth());
             buffer.writeNBT(nbt);

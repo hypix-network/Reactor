@@ -10,18 +10,18 @@ public final class PacketOutTrimMaterialRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = TrimMaterial.ALL.length;
+        final int amount = TrimMaterial.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 128, 24);
 
         buffer.writeString("minecraft:trim_material");
         buffer.writeVarInt(amount);
     
         for (final TrimMaterial material : TrimMaterial.ALL) {
-            buffer.writeString(material.getName());
+            buffer.writeMCId(material.getAssetName());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();
-            nbt.addString("asset_name", material.getName());
+            nbt.addString("asset_name", material.getAssetName());
             nbt.addString("ingredient", material.getIngredient());
             nbt.addFloat("item_model_index", (float)material.getModelIndex());
             nbt.addString("description", material.getDescription());

@@ -24,14 +24,12 @@ public final class PacketOutLoginSuccess implements PacketOutbound {
         final ExpectedSizeBuffer data = new ExpectedSizeBuffer(
             DataSize.UUID +
             DataSize.string(username) +
-            DataSize.BYTE +
             DataSize.BYTE
         );
 
         data.writeUUID(uuid);
         data.writeString(username);
         data.writeVarInt(0); // Properties
-        data.writeBoolean(false); // Strict Error Handling
 
         return data.buffer;
     }

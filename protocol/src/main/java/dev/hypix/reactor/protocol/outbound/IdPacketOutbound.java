@@ -15,9 +15,10 @@ public final class IdPacketOutbound {
         CONFIG_DISCONNECT = 0x02,
         CONFIG_FINISH = 0x03,
         CONFIG_RESET_CHAT = 0x06,
+        CONFIG_REGISTRY_DATA = 0x07,
         CONFIG_FEATURE_FLAGS = 0x0C,
         CONFIG_KNOWN_DATA_PACKS = 0x0E,
-        CONFIG_REGISTRY_DATA = 0x07;
+        CONFIG_UPDATE_TAGS = 0x0D;
 
     public static final int 
         PLAY_LOGIN = 0x2B,

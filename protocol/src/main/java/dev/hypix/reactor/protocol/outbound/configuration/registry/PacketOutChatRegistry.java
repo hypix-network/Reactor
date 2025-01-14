@@ -10,14 +10,14 @@ public final class PacketOutChatRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = ChatType.ALL.length;
+        final int amount = ChatType.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 128, 24);
 
         buffer.writeString("minecraft:chat_type");
         buffer.writeVarInt(amount);
 
         for (final ChatType chatType : ChatType.ALL) {
-            buffer.writeString(chatType.getId());
+            buffer.writeMCId(chatType.getName());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();;

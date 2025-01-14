@@ -41,7 +41,7 @@ public abstract class Player implements Entity, CommandSender {
     private boolean serverListings;
 
     @Override
-    public int getType() {
+    public EntityType getType() {
         return EntityType.PLAYER;
     }
 }

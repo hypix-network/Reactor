@@ -1,0 +1,52 @@
+import lombok.Getter;
+
+@Getter
+public final class Block {
+    private static final char[] NONE_DROPS = new char[0];
+
+    private final char id;
+    private final float resistance;
+    private final char[] drops;
+
+    public Block(int id, double resistance, char[] drops) {
+        this.id = (char)id;
+        this.resistance = (short) (resistance >= 10000 ? Material.UNBREAKABLE : resistance);
+        this.drops = drops;
+    }
+
+    public Block(int id, double resistance, int drop) {
+        this(id, resistance, (drop == 0 ? NONE_DROPS : new char[] {(char)drop}));
+    }
+
+    public Material[] getMaterialDrops() {
+        return Material.byIds(drops);
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        return object == this || (object instanceof Block block && block.id == this.id);
+    }
+
+    public static final Block[] {BLOCKS_FIELD};
+
+    @Getter
+    public static final class BlockCategory {
+        public static final BlockCategory[] ALL = new BlockCategory[{CATEGORIES_AMOUNT}];
+
+        private final String type;
+        private final char[] blocks;
+
+        private BlockCategory(int id, String type, char[] blocks) {
+            this.type = type;
+            this.blocks = blocks;
+            ALL.add(this);
+        }
+
+        public static final BlockCategory {CATEGORIES_FIELD};
+    }
+}

@@ -147,8 +147,10 @@ public final class PluginManagerImpl implements PluginManager {
     }
 
     @Override
-    public void loadPlugins(File directory) {
-        plugins.addAll(PluginLoader.load(directory));
+    public void loadPlugins(final File directory) {
+        if (directory.exists()) {
+            plugins.addAll(PluginLoader.load(directory));       
+        }
     }
 
     @Override

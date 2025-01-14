@@ -13,7 +13,7 @@ public final class WorldManager {
 
     public void setDefault() {
         this.worlds.clear();
-        this.defaultWorld = new World("default", WorldType.NORMAL, Biome.PLAINS);
+        this.defaultWorld = new World("default", WorldType.OVERWORLD, Biome.PLAINS);
         this.worlds.add(defaultWorld);
     }
 

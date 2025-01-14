@@ -36,6 +36,15 @@ public final class ExpectedSizeBuffer {
         index += bytes.length;
     }
 
+    public void writeChars(final char[] chars) {
+        int x = index;
+        for (final char v : chars) {
+            buffer[x++] = (byte)(v >>> 8);
+            buffer[x++] = (byte)(v);
+        }
+        index += chars.length * 2;
+    }
+
     public void writeBoolean(final boolean v) {
         buffer[index++] = v ? (byte)1 : 0;
     }

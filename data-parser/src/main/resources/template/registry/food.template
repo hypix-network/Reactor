@@ -1,0 +1,26 @@
+import lombok.Getter;
+
+import java.util.Collection;
+import dev.hypix.dataparser.util.CopyOnWriteCollection;
+
+@Getter
+public final class Food {
+
+    public static final Collection<Food> ALL = new CopyOnWriteCollection<>({ALL_FIELD});
+    private final String name;
+    private final char itemId;
+    private final double foodPoints;
+
+    public Food(String name, int itemId, double foodPoints) {
+        this.name = name;
+        this.itemId = (char)itemId;
+        this.foodPoints = foodPoints;
+    }
+
+    private Food(String name, int itemId, double foodPoints, int index) {
+        this(name, itemId, foodPoints);
+        ALL.add(this);
+    }
+
+    public static final Food {OBJECT_FIELD_TYPE};
+}

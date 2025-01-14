@@ -10,21 +10,21 @@ public final class PacketOutTrimPatternRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = TrimPattern.ALL.length;
+        final int amount = TrimPattern.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 32, 16);
 
         buffer.writeString("minecraft:trim_pattern");
         buffer.writeVarInt(amount);
     
         for (final TrimPattern pattern : TrimPattern.ALL) {
-            buffer.writeString(pattern.getId());
+            buffer.writeString(pattern.getAssetId());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();
-            nbt.addString("asset_id", pattern.getId());
-            nbt.addString("template_item", pattern.getItem());
+            nbt.addString("asset_id", pattern.getAssetId());
+            nbt.addString("template_item", pattern.getTemplateItem());
             nbt.addString("description", pattern.getDescription());
-            nbt.addBoolean("decal", false);
+            nbt.addBoolean("decal", pattern.isDecal());
             buffer.writeNBT(nbt);
         }
         return buffer.compress();

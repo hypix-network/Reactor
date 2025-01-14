@@ -47,6 +47,11 @@ public final class FriendlyBuffer {
         currentBuffer.writeBytes(bytes);
     }
 
+    public void writeChars(final char[] chars) {
+        tryResize(chars.length * 2);
+        currentBuffer.writeChars(chars);
+    }
+
     public void writePrefixBytes(final byte[] bytes) {
         tryResize(bytes.length + DataSize.varInt(bytes.length));
         currentBuffer.writeVarInt(bytes.length);
@@ -117,6 +122,25 @@ public final class FriendlyBuffer {
         writeByte(TagNBT.TAG_COMPOUND);
         nbt.writeTags(this);
         writeByte(TagNBT.TAG_END);
+    }
+
+    public void writeIdentifier(final String key, final String value) {
+        final byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        final byte[] valueBytes = value.getBytes(StandardCharsets.UTF_8);
+        tryResize(keyBytes.length + valueBytes.length);
+
+        currentBuffer.writeVarInt(keyBytes.length + valueBytes.length);
+        currentBuffer.writeBytes(keyBytes);
+        currentBuffer.writeBytes(valueBytes);
+    }
+
+    private static final byte[] minecraftId = "minecraft:".getBytes();
+    public void writeMCId(final String value) {
+        final byte[] valueBytes = value.getBytes(StandardCharsets.UTF_8);
+        tryResize(minecraftId.length + valueBytes.length);
+        currentBuffer.writeVarInt(minecraftId.length + valueBytes.length);
+        currentBuffer.writeBytes(minecraftId);
+        currentBuffer.writeBytes(valueBytes);
     }
 
     public ExpectedSizeBuffer getCurrentBuffer() {

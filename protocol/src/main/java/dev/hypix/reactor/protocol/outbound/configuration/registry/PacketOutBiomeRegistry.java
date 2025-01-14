@@ -11,14 +11,14 @@ public final class PacketOutBiomeRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = Biome.ALL.length;
+        final int amount = Biome.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 256, 64);
 
         buffer.writeString("minecraft:worldgen/biome");
         buffer.writeVarInt(amount);
     
         for (final Biome biome : Biome.ALL) {
-            buffer.writeString(biome.getId());
+            buffer.writeMCId(biome.getIdentifier());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();

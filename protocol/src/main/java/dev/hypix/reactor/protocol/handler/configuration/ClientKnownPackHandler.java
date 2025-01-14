@@ -1,55 +1,43 @@
 package dev.hypix.reactor.protocol.handler.configuration;
 
-import dev.hypix.reactor.api.entity.player.connection.PacketOutbound;
 import dev.hypix.reactor.protocol.PlayerConnectionImpl;
 import dev.hypix.reactor.protocol.handler.PacketHandler;
 import dev.hypix.reactor.protocol.inbound.IdPacketInbound;
 import dev.hypix.reactor.protocol.inbound.PacketInData;
 import dev.hypix.reactor.protocol.inbound.configuration.PacketInSelectKnownPack;
+import dev.hypix.reactor.protocol.outbound.CachedPacket;
 import dev.hypix.reactor.protocol.outbound.configuration.PacketOutFinishConfiguration;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutBannerRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutBiomeRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutChatRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutDamageTypeRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutDimensionRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutPaintingTypeRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutTrimMaterialRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutTrimPatternRegistry;
-import dev.hypix.reactor.protocol.outbound.configuration.registry.PacketOutWolfTypeRegistry;
+import dev.hypix.reactor.protocol.outbound.configuration.registry.Registries;
 
 final class ClientKnownPackHandler implements PacketHandler {
 
     private static final PacketOutFinishConfiguration FINISH_CONFIGURATION = new PacketOutFinishConfiguration();
 
-    private static final PacketOutbound
-        WOLF_TYPE = new PacketOutWolfTypeRegistry(),
-        PAINTING = new PacketOutPaintingTypeRegistry(),
-        TRIM_PATTERN = new PacketOutTrimPatternRegistry(),
-        TRIM_MATERIAL = new PacketOutTrimMaterialRegistry(),
-        BANNER = new PacketOutBannerRegistry(),
-        BIOME = new PacketOutBiomeRegistry(),
-        DAMAGE = new PacketOutDamageTypeRegistry(),
-        CHAT = new PacketOutChatRegistry(),
-        DIMENSION_TYPE = new PacketOutDimensionRegistry();
+    private static final CachedPacket
+        WOLF_VARIANT = Registries.packet(Registries.wolfVariants()),
+        DAMAGE_TYPES = Registries.packet(Registries.damageTypes()),
+        TRIM_MATERIAL = Registries.packet(Registries.trimMaterial()),
+        TRIM_PATTERN = Registries.packet(Registries.trimPattern()),
+        BANNER = Registries.packet(Registries.banner()),
+        BIOME = Registries.packet(Registries.biome()),
+        PAINTING = Registries.packet(Registries.painting()),
+        DIMENSION_TYPE = Registries.packet(Registries.dimensionTypes());
 
     @Override
     public void handle(PlayerConnectionImpl connection, int packetId, PacketInData data) {
         final PacketInSelectKnownPack knownPack = new PacketInSelectKnownPack();
         knownPack.read(data);
 
-        if (connection.isFirstConfig) {
-            connection.sendPackets(
-                WOLF_TYPE,
-                PAINTING,
-                TRIM_PATTERN,
-                TRIM_MATERIAL,
-                BANNER,
-                BIOME,
-                DAMAGE,
-                CHAT,
-                DIMENSION_TYPE
-            );
-        }
+        connection.sendPackets(
+            DAMAGE_TYPES,
+            TRIM_MATERIAL,
+            TRIM_PATTERN,
+            BANNER,
+            BIOME,
+            PAINTING,
+            WOLF_VARIANT,
+            DIMENSION_TYPE
+        );
 
         connection.sendPacket(FINISH_CONFIGURATION);
     }

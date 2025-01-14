@@ -1,0 +1,73 @@
+import lombok.Getter;
+
+import java.util.Collection;
+import dev.hypix.dataparser.util.CopyOnWriteCollection;
+
+@Getter
+public final class Biome {
+
+    public static final Collection<Biome> ALL = new CopyOnWriteCollection<>({ALL_FIELD});
+
+    private final int id;
+    private final String identifier;
+    private final double downFall;
+    private final boolean hasPrecipitation;
+    private final double temperature;
+    private final Effects effects;
+
+    public Biome(String identifier, double downFall, boolean hasPrecipitation, double temperature, Effects effects, int id) {
+        this.id = id;
+        this.identifier = identifier;
+        this.downFall = downFall;
+        this.hasPrecipitation = hasPrecipitation;
+        this.temperature = temperature;
+        this.effects = effects;
+    }
+
+    private Biome(int id, String identifier, double downFall, boolean hasPrecipitation, double temperature, Effects effects) {
+        this(identifier, downFall, hasPrecipitation, temperature, effects, id);
+        ALL.add(this);
+    }
+
+    public static record Effects(
+        int fogColor,
+        Integer foliageColor,
+        Integer grassColor,
+        String grassColorModifier,
+        String ambientSound,
+        int skyColor,
+        int waterColor,
+        int waterFogColor,
+        MoodSound moodSound,
+        Music music,
+        AdditionSound additionSound,
+        Particle particle
+    ){
+
+        public static record MoodSound(
+            String sound,
+            int tickDelay,
+            int blockSearchExtent,
+            double offSet
+        ){}
+
+        public static record Music(
+            int maxDelay,
+            int minDelay,
+            boolean replaceCurrentMusic,
+            String sound
+        ){}
+
+        public static record AdditionSound(
+            String sound,
+            double tickChance
+        ){}
+
+        public static record Particle(
+            String type,
+            double probability
+        ){}
+    }
+
+    public static final Biome {OBJECT_FIELD_TYPE};
+}

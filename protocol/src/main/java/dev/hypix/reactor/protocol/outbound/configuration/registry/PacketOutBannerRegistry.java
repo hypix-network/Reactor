@@ -10,19 +10,19 @@ public final class PacketOutBannerRegistry implements PacketOutbound {
 
     @Override
     public byte[] write() {
-        final int amount = Banner.ALL.length;
+        final int amount = Banner.ALL.size();
         final FriendlyBuffer buffer = new FriendlyBuffer(amount * 48, 16);
 
         buffer.writeString("minecraft:banner_pattern");
         buffer.writeVarInt(amount);
     
         for (final Banner banner : Banner.ALL) {
-            buffer.writeString(banner.getId());
+            buffer.writeMCId(banner.getAssetId());
             buffer.writeBoolean(true);
 
             final NBTFastWrite nbt = new NBTFastWrite();
-            nbt.addString("asset_id", banner.getId());
-            nbt.addString("translation_key", banner.getTranslation());
+            nbt.addString("asset_id", banner.getAssetId());
+            nbt.addString("translation_key", banner.getTranslationKey());
             buffer.writeNBT(nbt);
         }
         return buffer.compress();

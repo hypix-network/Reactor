@@ -1,0 +1,21 @@
+public record WorldType(
+    String id,
+	double ambientLight,
+	boolean bedWorks,
+	double coordinateScale,
+	String effects,
+	boolean hasCeiling,
+	boolean hasRaids,
+	boolean hasSkylight,
+	int height,
+	String infiniburn,
+	int logicalHeight,
+	int minY,
+	int monsterSpawnBlockLightLimit,
+	boolean natural,
+	boolean piglinSafe,
+	boolean respawn_anchor_works,
+	boolean ultrawarm
+) {
+    public static final WorldType {OBJECT_FIELD_TYPE};
+}
