@@ -1,33 +1,20 @@
-import lombok.Getter;
-
 import java.util.Collection;
 import dev.hypix.dataparser.util.CopyOnWriteCollection;
 
-@Getter
-public final class Biome {
-
+public record Biome(
+    String name,
+    boolean hasPrecipitation,
+    double temperature,
+    String temperatureModifier,
+    double downFall,
+    Effects effects
+) {
     public static final Collection<Biome> ALL = new CopyOnWriteCollection<>({ALL_FIELD});
 
-    private final int id;
-    private final String identifier;
-    private final double downFall;
-    private final boolean hasPrecipitation;
-    private final double temperature;
-    private final Effects effects;
-
-    public Biome(String identifier, double downFall, boolean hasPrecipitation, double temperature, Effects effects, int id) {
-        this.id = id;
-        this.identifier = identifier;
-        this.downFall = downFall;
-        this.hasPrecipitation = hasPrecipitation;
-        this.temperature = temperature;
-        this.effects = effects;
-    }
-
-    private Biome(int id, String identifier, double downFall, boolean hasPrecipitation, double temperature, Effects effects) {
-        this(identifier, downFall, hasPrecipitation, temperature, effects, id);
-        ALL.add(this);
-    }
+    public static Biome add(final Biome biome) {
+        ALL.add(biome);
+        return biome;
+    } 
 
     public static record Effects(
         int fogColor,

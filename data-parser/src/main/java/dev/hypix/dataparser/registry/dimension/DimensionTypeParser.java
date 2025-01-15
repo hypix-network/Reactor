@@ -22,9 +22,10 @@ public final class DimensionTypeParser implements Parser {
 
         int i = 0;
         for (final Entry<String, Object> entry : jsonObject.entrySet()) {
-            if (!(entry.getValue() instanceof JSONObject dimensionType)) {
+            if (!(entry.getValue() instanceof JSONObject type)) {
                 continue;
             }
+            final Object monsterSpawnLightLevel = type.get("monster_spawn_light_level");
             builder.append('\n');
             builder.append("        ");
             builder.append(toFieldName(entry.getKey()));
@@ -32,22 +33,24 @@ public final class DimensionTypeParser implements Parser {
 
             append(options, builder,
                 entry.getKey(),
-                dimensionType.getDouble("ambient_light"),
-                dimensionType.getBoolean("bed_works"),
-                dimensionType.getDouble("coordinate_scale"),
-                dimensionType.getString("effects"),
-                dimensionType.getBoolean("has_ceiling"),
-                dimensionType.getBoolean("has_raids"),
-                dimensionType.getBoolean("has_skylight"),
-                dimensionType.getIntValue("height"),
-                dimensionType.getString("infiniburn"),
-                dimensionType.getIntValue("logical_height"),
-                dimensionType.getIntValue("min_y"),
-                dimensionType.getIntValue("monster_spawn_block_light_limit"),
-                dimensionType.getBoolean("natural"),
-                dimensionType.getBoolean("piglin_safe"),
-                dimensionType.getBoolean("respawn_anchor_works"),
-                dimensionType.getBoolean("ultrawarm")
+                type.getLongValue("fixed_time"),
+                type.getBoolean("has_skylight"),
+                type.getBoolean("has_ceiling"),
+                type.getBoolean("ultrawarm"),
+                type.getBoolean("natural"),
+                type.getDoubleValue("coordinate_scale"),
+                type.getBoolean("bed_works"),
+                type.getBoolean("respawn_anchor_works"),
+                type.getIntValue("min_y"),
+                type.getIntValue("height"),
+                type.getIntValue("logical_height"),
+                type.getString("infiniburn"),
+                type.getString("effects"),
+                type.getFloatValue("ambient_light"),
+                type.getBoolean("piglin_safe"),
+                type.getBoolean("has_raids"),
+                (monsterSpawnLightLevel instanceof Integer) ? (int)monsterSpawnLightLevel : 0,
+                type.getIntValue("monster_spawn_block_light_limit")
             );
 
             builder.append(')');

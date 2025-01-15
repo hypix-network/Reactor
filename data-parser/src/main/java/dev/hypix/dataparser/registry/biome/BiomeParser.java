@@ -21,17 +21,21 @@ public final class BiomeParser implements Parser {
             if (!(entry.getValue() instanceof JSONObject biome)) {
                 continue;
             }
-            final double downFall = biome.getDoubleValue("downfall");
-            final boolean hasPrecipitation = biome.getBooleanValue("has_precipitation");;
-            final double temperature = biome.getDoubleValue("temperature");;
             builder.append('\n');
             builder.append("        ");
             builder.append(toFieldName(entry.getKey()));
-            builder.append(" = new Biome(");
-            append(builder, i, entry.getKey(), downFall, hasPrecipitation, temperature);;
+            builder.append(" = add(new Biome(");
+            append(builder, 
+                entry.getKey(),
+                biome.getBooleanValue("has_precipitation"),
+                biome.getDoubleValue("temperature"),
+                biome.getOrDefault("temperature_modifier", "none"),
+                biome.getDoubleValue("downfall")
+            );
+    
             builder.append(',');
             builder.append(appendEffects(biome.getJSONObject("effects")));
-            builder.append(')');
+            builder.append("))");
             if (++i != jsonObject.size()) {
                 builder.append(',');
             }

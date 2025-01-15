@@ -4,7 +4,7 @@ import dev.hypix.reactor.api.entity.damage.DamageType;
 import dev.hypix.reactor.api.entity.wolf.WolfType;
 import dev.hypix.reactor.api.item.armor.TrimMaterial;
 import dev.hypix.reactor.api.item.armor.TrimPattern;
-import dev.hypix.reactor.api.nbt.type.NBTFastWrite;
+import dev.hypix.reactor.api.nbt.type.NBTGeneral;
 import dev.hypix.reactor.api.util.buffer.FriendlyBuffer;
 import dev.hypix.reactor.api.world.block.Banner;
 import dev.hypix.reactor.api.world.block.Painting;
@@ -31,10 +31,11 @@ public final class Registries {
             buffer.writeString("minecraft:"+wolfType.getName());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("wild_texture", wolfType.getWildTexture());
             nbt.addString("tame_texture", wolfType.getTameTexture());
             nbt.addString("angry_texture", wolfType.getAngryTexture());
+            nbt.addString("biomes", "minecraft:badlands");
             buffer.writeNBT(nbt);
         }
         return buffer.compress();
@@ -51,7 +52,7 @@ public final class Registries {
             buffer.writeString("minecraft:"+damageType.getName());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("message_id", damageType.getMessageId());
             nbt.addString("scaling", damageType.getScaling());
             nbt.addFloat("exhaustion", (float)damageType.getExhaustion());
@@ -72,7 +73,7 @@ public final class Registries {
             buffer.writeString("minecraft:"+material.getAssetName());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("asset_name", material.getAssetName());
             nbt.addString("ingredient", material.getIngredient());
             nbt.addFloat("item_model_index", (float)material.getModelIndex());
@@ -94,7 +95,7 @@ public final class Registries {
             buffer.writeString(pattern.getAssetId());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("asset_id", pattern.getAssetId());
             nbt.addString("template_item", pattern.getTemplateItem());
             nbt.addString("description", pattern.getDescription());
@@ -115,7 +116,7 @@ public final class Registries {
             buffer.writeString(banner.getAssetId());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("asset_id", banner.getAssetId());
             nbt.addString("translation_key", banner.getTranslationKey());
             buffer.writeNBT(nbt);
@@ -134,7 +135,7 @@ public final class Registries {
             buffer.writeString(painting.getAssetId());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
+            final NBTGeneral nbt = new NBTGeneral();
             nbt.addString("asset_id", painting.getAssetId());
             nbt.addInt("height", painting.getHeight());
             nbt.addInt("width", painting.getWidth());
@@ -151,12 +152,13 @@ public final class Registries {
         buffer.writeVarInt(amount);
     
         for (final WorldType world : WorldType.ALL) {
-            buffer.writeMCId(world.name());
+            buffer.writeString("minecraft:"+world.name());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite(15);
+            final NBTGeneral nbt = new NBTGeneral();
 
-            nbt.addBoolean("has_skylight", world.hasSkylight());
+            nbt.addLong("fixed_time", world.fixedTime());
+            nbt.addBoolean("has_skylight", world.hasSkyLight());
             nbt.addBoolean("has_ceiling", world.hasCeiling());
             nbt.addBoolean("ultrawarm", world.ultrawarm());
             nbt.addBoolean("natural", world.natural());
@@ -165,12 +167,14 @@ public final class Registries {
             nbt.addBoolean("respawn_anchor_works", world.respawnAnchorWorks());
             nbt.addInt("min_y", world.minY());
             nbt.addInt("height", world.height());
-            nbt.addInt("logical_height", world.logicalHeight());
+            nbt.addInt("logical_height", world.localHeight());
             nbt.addString("infiniburn", world.infiniburn());
             nbt.addString("effects", world.effects());
             nbt.addFloat("ambient_light", (float)world.ambientLight());
             nbt.addBoolean("piglin_safe", world.piglinSafe());
             nbt.addBoolean("has_raids", world.hasRaids());
+            nbt.addInt("monster_spawn_light_level", world.monsterSpawnLightLevel());
+            nbt.addInt("monster_spawn_block_light_limit", world.monsterSpawnBlockLightLimit());
 
             buffer.writeNBT(nbt);
         }
@@ -185,44 +189,44 @@ public final class Registries {
         buffer.writeVarInt(amount);
     
         for (final Biome biome : Biome.ALL) {
-            buffer.writeString("minecraft:"+biome.getIdentifier());
+            buffer.writeString("minecraft:"+biome.name());
             buffer.writeBoolean(true);
 
-            final NBTFastWrite nbt = new NBTFastWrite();
-            nbt.addBoolean("has_precipitation", biome.isHasPrecipitation());
-            nbt.addFloat("temperature", (float)biome.getTemperature());
-            nbt.addFloat("downfall", (float)biome.getDownFall());
-            nbt.addCompound("effects", createEffects(biome.getEffects()));
+            final NBTGeneral nbt = new NBTGeneral();
+            nbt.addBoolean("has_precipitation", biome.hasPrecipitation());
+            nbt.addFloat("temperature", (float)biome.temperature());
+            nbt.addFloat("downfall", (float)biome.downFall());
+            nbt.addString("temperature_modifier", biome.temperatureModifier() == null ? "none" : biome.temperatureModifier());
+
+            nbt.addCompound("effects", createEffects(biome.effects()));
             buffer.writeNBT(nbt);
         }
         return buffer.compress();
     }
 
-    private static NBTFastWrite createEffects(final Effects effects) {
-        final NBTFastWrite nbt = new NBTFastWrite();
+    private static NBTGeneral createEffects(final Effects effects) {
+        final NBTGeneral nbt = new NBTGeneral();
         nbt.addInt("fog_color", effects.fogColor());
         nbt.addInt("water_color", effects.waterColor());
         nbt.addInt("water_fog_color", effects.waterFogColor());
         nbt.addInt("sky_color", effects.skyColor());
+
         if (effects.foliageColor() != null) {
             nbt.addInt("foliage_color", effects.foliageColor());
         }
         if (effects.grassColor() != null) {
             nbt.addInt("grass_color", effects.grassColor());
         }
-        if (effects.grassColorModifier() != null) {
-            nbt.addString("grass_color_modifier", effects.grassColorModifier());
-        }
+        nbt.addString("grass_color_modifier", effects.grassColorModifier() == null ? "none" : effects.grassColorModifier());
 
-        if (effects.particle() != null) {
-            nbt.addCompound("particle", createParticle(effects.particle()));
-        }
         if (effects.moodSound() != null) {
             nbt.addCompound("mood_sound", createMoodSound(effects.moodSound()));
         }
+
         if (effects.additionSound() != null) {
             nbt.addCompound("additions_sound", createAdditionSound(effects.additionSound()));
         }
+
         if (effects.music() != null) {
             nbt.addCompound("music", createMusic(effects.music()));
         }
@@ -230,14 +234,8 @@ public final class Registries {
         return nbt;
     }
 
-    private static NBTFastWrite createParticle(final Effects.Particle particle) {
-        final NBTFastWrite nbt = new NBTFastWrite(1);
-        nbt.addString("type", particle.type());
-        return nbt;
-    }
-
-    private static NBTFastWrite createMoodSound(final Effects.MoodSound sound) {
-        final NBTFastWrite nbt = new NBTFastWrite(4);
+    private static NBTGeneral createMoodSound(final Effects.MoodSound sound) {
+        final NBTGeneral nbt = new NBTGeneral();
         nbt.addString("sound", sound.sound());
         nbt.addInt("block_search_extent", sound.blockSearchExtent());
         nbt.addInt("tick_delay", sound.tickDelay());
@@ -245,15 +243,15 @@ public final class Registries {
         return nbt;
     }
 
-    private static NBTFastWrite createAdditionSound(final Effects.AdditionSound sound) {
-        final NBTFastWrite nbt = new NBTFastWrite(2);
+    private static NBTGeneral createAdditionSound(final Effects.AdditionSound sound) {
+        final NBTGeneral nbt = new NBTGeneral();
         nbt.addString("sound", sound.sound());
         nbt.addDouble("tick_chance", sound.tickChance());
         return nbt;
     }
 
-    private static NBTFastWrite createMusic(final Effects.Music music) {
-        final NBTFastWrite nbt = new NBTFastWrite(4);
+    private static NBTGeneral createMusic(final Effects.Music music) {
+        final NBTGeneral nbt = new NBTGeneral();
         nbt.addString("sound", music.sound());
         nbt.addInt("min_delay", music.minDelay());
         nbt.addInt("max_delay", music.maxDelay());

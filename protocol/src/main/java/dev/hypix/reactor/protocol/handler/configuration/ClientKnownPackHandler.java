@@ -29,14 +29,14 @@ final class ClientKnownPackHandler implements PacketHandler {
         knownPack.read(data);
 
         connection.sendPackets(
-            DAMAGE_TYPES,
-            TRIM_MATERIAL,
-            TRIM_PATTERN,
-            BANNER,
             BIOME,
             PAINTING,
-            WOLF_VARIANT,
-            DIMENSION_TYPE
+            BANNER,
+            TRIM_MATERIAL,
+            TRIM_PATTERN,
+            DAMAGE_TYPES,
+            DIMENSION_TYPE,
+            WOLF_VARIANT
         );
 
         connection.sendPacket(FINISH_CONFIGURATION);
