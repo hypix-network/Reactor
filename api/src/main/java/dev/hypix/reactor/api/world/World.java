@@ -19,11 +19,6 @@ public class World {
     private final WorldType worldType;
     private final Biome biome;
 
-
-    public String identifier() {
-        return "minecraft:"+name;
-    }
-
     @Override
     public int hashCode() {
         return id;

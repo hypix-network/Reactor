@@ -21,6 +21,6 @@ public final class IdPacketOutbound {
         CONFIG_UPDATE_TAGS = 0x0D;
 
     public static final int 
-        PLAY_LOGIN = 0x2B,
+        PLAY_LOGIN = 0x2C,
         PLAY_DISCONNECT = 0x1D;
 }

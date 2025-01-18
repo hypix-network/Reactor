@@ -13,12 +13,9 @@ public final class UUIDCreator {
         final byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
         final byte[] uuidBytes = new byte[16];
 
-        for (int i = 0; i < 16; i++) {
-            if (i < bytes.length) {
-                uuidBytes[i] = bytes[i];
-            } else {
-                uuidBytes[i] = 0;
-            }
+        final int minLength = Math.min(input.length(), 16);
+        for (int i = 0; i < minLength; i++) {
+            uuidBytes[i] = bytes[i];
         }
 
         long mostSigBits = 0;

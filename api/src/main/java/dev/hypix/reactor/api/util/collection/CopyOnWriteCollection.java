@@ -106,8 +106,7 @@ public final class CopyOnWriteCollection<E> implements Collection<E> {
 
     @Override
     public boolean addAll(final Collection<? extends E> c) {
-        int newSize = size+c.size();
-        
+        final int newSize = size+c.size();
         if (newSize >= array.length) {
             @SuppressWarnings("unchecked")
             final E[] copy = (E[]) new Object[newSize];
@@ -116,7 +115,7 @@ public final class CopyOnWriteCollection<E> implements Collection<E> {
         }
 
         for (final E e : c) {
-            array[newSize++] = e;
+            array[size++] = e;
         }
         return true;
     }
@@ -125,7 +124,7 @@ public final class CopyOnWriteCollection<E> implements Collection<E> {
     public boolean removeAll(final Collection<?> c) {
         boolean modified = false;
         for (final Object obj : c) {
-            while (remove(obj)) {
+            if (remove(obj)) {
                 modified = true;
             }
         }
